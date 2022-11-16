@@ -26,6 +26,9 @@
 		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
+	<welcome-file>
+			/common/index.jsp
+		</welcome-file>
 		<welcome-file>
 			index.jsp
 		</welcome-file>

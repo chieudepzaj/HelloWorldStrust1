@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.example.common.DB.DBConnection;
 import com.example.common.model.UserDto;
+import com.sun.java_cup.internal.internal_error;
 
 public class UserRepository {
 
@@ -29,6 +30,34 @@ public class UserRepository {
 
 	public void setConnection(Connection connection) {
 		this.connection = connection;
+	}
+	
+//////Method for register user data in db
+	public int loginUser(String username, String password) throws Exception {
+		ResultSet rs = null;
+		int i = 0;
+		try {
+			String sql = "SELECT users.username, users.password FROM users where users.username = ?;";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				if(rs.getString(1).equalsIgnoreCase(username) && 	rs.getString(2).equalsIgnoreCase(password))
+				{
+						return 1;
+					
+				}
+			}
+			return 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return i;
+		} finally {
+			if (connection != null) {
+				connection.close();
+
+			}
+		}
 	}
 
 	////// Method for register user data in db

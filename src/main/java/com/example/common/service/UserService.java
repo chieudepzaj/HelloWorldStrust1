@@ -39,6 +39,15 @@ public class UserService {
 			return -1;
 		}
 	}
+	
+	public int login(String username, String password) {
+		try {
+			return userRepository.loginUser(username,password);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return -1;
+		}
+	}
 
 	public int updateUser(UserDto userDto) {
 		try {

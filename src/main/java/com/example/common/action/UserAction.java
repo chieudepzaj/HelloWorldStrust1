@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,6 +16,50 @@ import com.example.common.model.UserDto;
 import com.example.common.service.UserService;
 
 public class UserAction extends MappingDispatchAction {
+
+	public ActionForward loginUser(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		HttpSession session = (HttpSession) request.getAttribute("loggin");
+		if (session != null) {
+			System.out.println("ok");
+		}
+		return mapping.findForward("loginUser");
+	}
+
+	public ActionForward loginUserpro(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		HttpSession session = (HttpSession) request.getSession();
+		String login = (String) session.getAttribute("loggin");
+		if (login == null) {
+			User user = (User) form;
+			UserService userService = new UserService();
+			int result = userService.login(user.getUsername(), user.getPassword());
+			if (result <= 0) {
+				request.setAttribute("message", "Username or password wrong");
+				System.out.println("Something wrong! Cannot login user");
+			} else {
+				request.setAttribute("message", "Login user successfully!");
+				System.out.println("Login user successfully!");
+				session.setAttribute("loggin", user.getUsername());
+				return mapping.findForward("loginsuccess");
+			}
+
+		}
+
+		response.sendRedirect("/HelloWorldStrust1/common/list-user.html");
+		return null;
+
+	}
+
+	public ActionForward logoutUser(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		HttpSession session = (HttpSession) request.getSession(true);
+
+		session.removeAttribute("loggin");
+
+		return mapping.findForward("logoutUser");
+	}
 
 	public ActionForward addUser(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -29,7 +74,12 @@ public class UserAction extends MappingDispatchAction {
 		UserService userService = new UserService();
 		UserDto userDto = new UserDto(user.getUsername(), Integer.valueOf(user.getAge()), user.getEmail(),
 				user.getAddress(), user.getPassword());
+//		UserDto users = userService.getUserByUsername(user.getUsername());
+//		if(users!= null) {
+//			i = 6;
+//		}else {
 		i = checkInput(userDto);
+		// }
 		switch (i) {
 		case 1:
 			request.setAttribute("message", "Username is requite and username has at least 6 characters");
@@ -45,6 +95,9 @@ public class UserAction extends MappingDispatchAction {
 			break;
 		case 5:
 			request.setAttribute("message", "Password is requite and password has at least 6 characters");
+			break;
+		case 6:
+			request.setAttribute("message", "Username has already existed");
 			break;
 		default:
 			break;
@@ -73,19 +126,26 @@ public class UserAction extends MappingDispatchAction {
 
 	public ActionForward deleteUser(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String username = request.getParameter("username");
-		UserService userService = new UserService();
-		int result = userService.deleteUser(username);
-		if (result <= 0) {
-			request.setAttribute("message", "Something wrong! Cannot delete user");
-		} else {
-			request.setAttribute("message", "Delete user sucessfully!");
-		}
-		userService = new UserService();
-		List<UserDto> list = userService.getListUsers();
-		request.setAttribute("list", list);
+		HttpSession session = (HttpSession) request.getSession();
+		String login = (String) session.getAttribute("loggin");
+		if (login != null) {
+			String username = request.getParameter("username");
+			UserService userService = new UserService();
+			int result = userService.deleteUser(username);
+			if (result <= 0) {
+				request.setAttribute("message", "Something wrong! Cannot delete user");
+			} else {
+				request.setAttribute("message", "Delete user sucessfully!");
+			}
+			userService = new UserService();
+			List<UserDto> list = userService.getListUsers();
+			request.setAttribute("list", list);
 
-		return mapping.findForward("deleteUser");
+			return mapping.findForward("deleteUser");
+		} else {
+			response.sendRedirect("/HelloWorldStrust1/common/login-user.html");
+			return null;
+		}
 	}
 
 	public ActionForward editUser(ActionMapping mapping, ActionForm form, HttpServletRequest request,

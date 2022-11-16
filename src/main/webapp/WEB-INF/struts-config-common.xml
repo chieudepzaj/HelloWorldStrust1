@@ -12,8 +12,8 @@
 
 	<action-mappings>
 		<action path="/list-user"
-			type="com.example.common.action.UserAction" parameter="listUser"
-			name="user" validate="false">
+			type="com.example.common.action.UserAction" parameter="listUser" validate="true"
+			name="user" >
 			<forward name="listUser" path="/listuser.jsp"></forward>
 		</action>
 		<action path="/add-user"
@@ -40,6 +40,22 @@
 			type="com.example.common.action.UserAction" parameter="editUserpro" 
 			name="user">
 			<forward name="editUserpro" path="/edituser.jsp"></forward>
+		</action>
+		<action path="/login-user"
+			type="com.example.common.action.UserAction" parameter="loginUser"
+			name="user" >
+			<forward name="loginUser" path="/login.jsp"></forward>
+		</action>
+		<action path="/login-user-pro" input="/login.jsp" scope="session"
+			type="com.example.common.action.UserAction" parameter="loginUserpro" 
+			name="user">
+			<forward name="loginUserpro" path="/login.jsp"></forward>
+			<forward name="loginsuccess" path="/list-user.html" redirect="true"></forward>
+		</action>
+			<action path="/logout"
+			type="com.example.common.action.UserAction" parameter="logoutUser"
+			name="user">
+			<forward name="logoutUser" path="/login-user.html" redirect ="true" ></forward>
 		</action>
 	</action-mappings>
 
