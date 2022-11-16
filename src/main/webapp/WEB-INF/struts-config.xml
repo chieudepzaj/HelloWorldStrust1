@@ -5,16 +5,4 @@
 
 <struts-config>
 
-	<form-beans>
-	   <form-bean name="user" 
-		type="com.example.model.User"/>
-	</form-beans>
-
-	<action-mappings>
-	   <action path="/hello"
-		type="com.example.action.UserAction" name="user">
-		<forward name="success" path="/hello.jsp"/>
-	   </action>
-	</action-mappings>
-
 </struts-config>
