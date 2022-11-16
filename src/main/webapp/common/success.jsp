@@ -1,14 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Registration Successful</title>
-</head>
-<body>
-	<center>
-		<h1>Registration Successful</h1>
-	</center>
-</body>
-</html>
+<%-- Getting login and error message if it's posible --%>
+<%
+	String login = (String) session.getAttribute("loggin");
+%>
+<%
+	if (login != null) {
+%>
+<jsp:forward page="/common/list-user.html"></jsp:forward>
+<%
+	} else {
+		response.sendRedirect("login-user.html");
+	}
+%>

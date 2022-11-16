@@ -10,11 +10,7 @@
 </head>
 <body>
 	<h1 style="text-align: center;">
-		<html:link style="color: blue;" action="/common/add-user.html">Create new User</html:link>
-		<br>
-	</h1>
-	<h1 style="text-align: center;">
-		<html:link style="color: blue;" action="/common/list-user.html">List User</html:link>
+		<html:link style="color: blue;" action="/common/login-user.html">Login User</html:link>
 		<br>
 	</h1>
 </body>
